@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html ng-app="monApp">
+    <head>
+        <title>Atelier AngularJS</title>
+        <meta charset="UTF-8">
+        <script src="JS/angular.min.js" type="text/javascript"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body ng-controller="menuController">
+        <div>
+            <h1>Nouveau film</h1>
+            <fieldset>
+                <label>Titre</label>
+                <input type="text" ng-model="titre" />
+                <label>Année</label>
+                <input type="number" ng-model="annee" />
+                <input type="button" value="Ajouter" ng-click="ajouter()"/>
+            </fieldset>
+        </div>
+
+        <div>
+        <h1>Liste des films</h1>
+        Taille Page : 
+        <select ng-model="taillePage">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            
+        </select>
+        
+            <table>
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Annee de Sortie</th>
+                    </tr>
+                </thead>
+                <tr ng-repeat="f in films|limitTo:taillePage">
+                    <td>{{ f.titre | uppercase }}</td>
+                    <td>{{f.annee}}</td>
+                </tr>
+
+            </table>
+        </div>
+
+
+
+        <script type="text/javascript">
+                    var app = angular.module('monApp', []);
+                    app.controller("menuController", ['$scope', '$http', function ($scope, $http) {
+                            $scope.films = [
+                                {titre: "Dracula",
+                                    annee: 1992
+                                },
+                                {titre: "Frankenstein",
+
+                                    annee: 1994
+                                },
+                                {titre: "Dragon Ball",
+                                    annee: 2009
+
+                                }
+
+                            ];
+                            
+                            $scope.titre = "Votre titre";
+                            $scope.annee = 2015;
+                            $scope.taillePage = 5;
+                            
+                            $scope.ajouter = function() {
+                                var objetFilm = {
+                                    titre: $scope.titre ,
+                                    annee: $scope.annee
+                                };
+                                
+                                $scope.films.push(objetFilm);
+                            };
+
+                        }]);
+        </script>
+    </body>
+</html>
