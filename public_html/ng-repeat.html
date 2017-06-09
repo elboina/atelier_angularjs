@@ -24,24 +24,27 @@ and open the template in the editor.
         </div>
 
         <div>
-        <h1>Liste des films</h1>
-        Taille Page : 
-        <select ng-model="taillePage">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-            <option value="20">20</option>
+            <h1>Liste des films</h1>
             
-        </select>
-        
+            Taille Page :
+
+            <select ng-model="taillePage">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+
+            </select>
+            <input type="button" value="Page précédente" ng-click="reculerPage()" /> Page {{numPage }} <input type="button" value="Page suivante" ng-click="avancerPage()" />
             <table>
                 <thead>
                     <tr>
-                        <th>Titre</th>
-                        <th>Annee de Sortie</th>
+                        <th ng-click="trierPar='titre'" >Titre</th>
+                
+                        <th ng-click="trierPar='annee'">Année</th>
                     </tr>
                 </thead>
-                <tr ng-repeat="f in films|limitTo:taillePage">
+                <tr ng-repeat="f in films|orderBy:trierPar:ordre|limitTo:taillePage:((numPage - 1)* taillePage)">
                     <td>{{ f.titre | uppercase }}</td>
                     <td>{{f.annee}}</td>
                 </tr>
@@ -69,17 +72,46 @@ and open the template in the editor.
 
                             ];
                             
+                            $scope.ordre = true;
+                            
+                            
+
                             $scope.titre = "Votre titre";
                             $scope.annee = 2015;
                             $scope.taillePage = 5;
+                            $scope.numPage = 1;
+                            $scope.trierPar = 'annee';
                             
-                            $scope.ajouter = function() {
+                            $scope.inverser = function(nouvOrdre) {
+                                nouvOrdre = !($scope.ordre);
+                            };
+                           
+                            $scope.ajouter = function () {
                                 var objetFilm = {
-                                    titre: $scope.titre ,
+                                    titre: $scope.titre,
                                     annee: $scope.annee
                                 };
-                                
+
                                 $scope.films.push(objetFilm);
+                            };
+
+                            $scope.avancerPage = function () {
+
+                                if($scope.numPage*$scope.taillePage <= $scope.films.length)
+                                    $scope.numPage = $scope.numPage + 1;
+                                else
+                                    return;
+                                };
+
+                            $scope.reculerPage = function () {
+                                if ($scope.numPage > 1)
+                                {
+
+                                    $scope.numPage = $scope.numPage - 1;
+                                } else {
+                                    return;
+                                }
+
                             };
 
                         }]);
